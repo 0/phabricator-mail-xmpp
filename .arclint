@@ -1,0 +1,47 @@
+{
+  "exclude": "(^externals/)",
+  "linters": {
+    "chmod": {
+      "type": "chmod"
+    },
+    "filename": {
+      "type": "filename"
+    },
+    "generated": {
+      "type": "generated"
+    },
+    "json": {
+      "type": "json",
+      "include": [
+        "(^\\.arcconfig$)",
+        "(^\\.arclint$)"
+      ]
+    },
+    "merge-conflict": {
+      "type": "merge-conflict"
+    },
+    "phutil-library": {
+      "type": "phutil-library",
+      "include": "(\\.php$)"
+    },
+    "spelling": {
+      "type": "spelling"
+    },
+    "text": {
+      "type": "text",
+      "exclude": "(\\.md$)"
+    },
+    "text-markdown": {
+      "type": "text",
+      "include": "(\\.md$)",
+      "severity": {
+        "3": "disabled"
+      }
+    },
+    "xhpast": {
+      "type": "xhpast",
+      "include": "(\\.php$)",
+      "standard": "phutil.xhpast"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "load": [
+    "src/",
+    "phabricator/src/"
+  ]
+}
