@@ -6,6 +6,8 @@
 final class PhabricatorMailImplementationXMPPAdapter
   extends PhabricatorMailImplementationAdapter {
 
+  const ADAPTERTYPE = 'xmpp';
+
   private $params = array();
 
   public function setFrom($email, $name = '') {
@@ -75,12 +77,7 @@ final class PhabricatorMailImplementationXMPPAdapter
   }
 
   public function newLegacyOptions() {
-    return array(
-      'host' => PhabricatorEnv::getEnvConfig('xmpp.host'),
-      'port' => PhabricatorEnv::getEnvConfig('xmpp.port'),
-      'user' => PhabricatorEnv::getEnvConfig('xmpp.user'),
-      'password' => PhabricatorEnv::getEnvConfig('xmpp.password'),
-    );
+    return $this->newDefaultOptions();
   }
 
   /**

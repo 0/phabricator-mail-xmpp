@@ -10,11 +10,9 @@ phutil_register_library_map(array(
   '__library_version__' => 2,
   'class' => array(
     'PhabricatorMailImplementationXMPPAdapter' => 'applications/metamta/adapter/PhabricatorMailImplementationXMPPAdapter.php',
-    'PhabricatorXMPPConfigOptions' => 'applications/config/option/PhabricatorXMPPConfigOptions.php',
   ),
   'function' => array(),
   'xmap' => array(
     'PhabricatorMailImplementationXMPPAdapter' => 'PhabricatorMailImplementationAdapter',
-    'PhabricatorXMPPConfigOptions' => 'PhabricatorApplicationConfigOptions',
   ),
 ));

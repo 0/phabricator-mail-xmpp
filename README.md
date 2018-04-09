@@ -6,7 +6,7 @@ A [Phabricator](https://phacility.com/phabricator/) mail adapter to send message
 ## Caveats
 
 * This will be used _in place of_ other mail adapters.
-  Your Phabricator instance will not send out any email when this is enabled.
+  Your Phabricator instance will not send out any email when this is enabled and working.
 * This is only for outgoing messages.
   It will not receive any replies sent through XMPP.
 * This is a bit of a hack, so use it at your own peril.
@@ -27,9 +27,36 @@ In order for this mail adapter to be useful, you need:
 1. Configure your Phabricator instance:
     1. Run `bin/config set load-libraries '["phabricator-mail-xmpp/src"]'`.
         * If `load-libraries` is already set, you'll need to add to it instead of overwriting it.
-    1. Set the configuration values in the "XMPP" section (`https://example.com/config/group/xmpp/`).
-    1. Set `metamta.mail-adapter` to `PhabricatorMailImplementationXMPPAdapter`.
+    1. Set `cluster.mailers` as described below.
 1. Ask your users to change their primary email addresses to their XMPP JIDs.
+
+
+### Configuration
+
+The `options` for this mailer are: `host`, `port`, `user`, `password`.
+These must be set in `cluster.mailers`; legacy configuration is not supported.
+
+As recommended in [Configuring Outbound Email](https://secure.phabricator.com/book/phabricator/article/configuring_outbound_email/), it's easiest to make a `mailers.json` file and run
+```
+bin/config set cluster.mailers --stdin < mailers.json
+```
+The file should look something like
+```
+[
+  {
+    "key": "xmpp",
+    "type": "xmpp",
+    "options": {
+      "host": "example.com",
+      "port": "5222",
+      "user": "xmppuser",
+      "password": "xmpppass"
+    }
+  }
+]
+```
+
+It should in principle be possible to configure other mailers as well, for failover or load balancing, but those concepts don't really jibe with the spirit of this mail adapter.
 
 
 ## Tips
