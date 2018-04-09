@@ -61,7 +61,7 @@ final class PhabricatorMailImplementationXMPPAdapter
         'host' => 'string',
         'port' => 'string',
         'user' => 'string',
-        'pass' => 'string',
+        'password' => 'string',
       ));
   }
 
@@ -70,7 +70,7 @@ final class PhabricatorMailImplementationXMPPAdapter
       'host' => null,
       'port' => null,
       'user' => null,
-      'pass' => null,
+      'password' => null,
     );
   }
 
@@ -79,7 +79,7 @@ final class PhabricatorMailImplementationXMPPAdapter
       'host' => PhabricatorEnv::getEnvConfig('xmpp.host'),
       'port' => PhabricatorEnv::getEnvConfig('xmpp.port'),
       'user' => PhabricatorEnv::getEnvConfig('xmpp.user'),
-      'pass' => PhabricatorEnv::getEnvConfig('xmpp.pass'),
+      'password' => PhabricatorEnv::getEnvConfig('xmpp.password'),
     );
   }
 
@@ -95,16 +95,16 @@ final class PhabricatorMailImplementationXMPPAdapter
     $host = $this->getOption('host');
     $port = $this->getOption('port');
     $user = $this->getOption('user');
-    $pass = $this->getOption('pass');
+    $password = $this->getOption('password');
 
-    if (!$host || !$port || !$user || !$pass) {
+    if (!$host || !$port || !$user || !$password) {
       throw new Exception(
         pht(
           "Configure '%s', '%s', '%s', and '%s' to use XMPP to send messages.",
           'xmpp.host',
           'xmpp.port',
           'xmpp.user',
-          'xmpp.pass'));
+          'xmpp.password'));
     }
 
     $subject = idx($this->params, 'subject');
@@ -113,7 +113,7 @@ final class PhabricatorMailImplementationXMPPAdapter
 
     $options = new Fabiang\Xmpp\Options('tcp://'.$host.':'.$port);
     $options->setUsername($user)
-      ->setPassword($pass);
+      ->setPassword($password);
 
     $client = new Fabiang\Xmpp\Client($options);
     $client->connect();

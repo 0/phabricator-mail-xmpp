@@ -30,7 +30,7 @@ final class PhabricatorXMPPConfigOptions
       $this->newOption('xmpp.user', 'string', null)
         ->setLocked(true)
         ->setDescription(pht('XMPP account username.')),
-      $this->newOption('xmpp.pass', 'string', null)
+      $this->newOption('xmpp.password', 'string', null)
         ->setHidden(true)
         ->setDescription(pht('XMPP account password.')),
     );
