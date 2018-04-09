@@ -54,6 +54,35 @@ final class PhabricatorMailImplementationXMPPAdapter
     return false;
   }
 
+  protected function validateOptions(array $options) {
+    PhutilTypeSpec::checkMap(
+      $options,
+      array(
+        'host' => 'string',
+        'port' => 'string',
+        'user' => 'string',
+        'pass' => 'string',
+      ));
+  }
+
+  public function newDefaultOptions() {
+    return array(
+      'host' => null,
+      'port' => null,
+      'user' => null,
+      'pass' => null,
+    );
+  }
+
+  public function newLegacyOptions() {
+    return array(
+      'host' => PhabricatorEnv::getEnvConfig('xmpp.host'),
+      'port' => PhabricatorEnv::getEnvConfig('xmpp.port'),
+      'user' => PhabricatorEnv::getEnvConfig('xmpp.user'),
+      'pass' => PhabricatorEnv::getEnvConfig('xmpp.pass'),
+    );
+  }
+
   /**
    * @phutil-external-symbol class Fabiang\Xmpp\Client
    * @phutil-external-symbol class Fabiang\Xmpp\Options
@@ -63,10 +92,10 @@ final class PhabricatorMailImplementationXMPPAdapter
     $root = dirname(phutil_get_library_root('phabricator-mail-xmpp'));
     require_once $root.'/externals/xmpp/vendor/autoload.php';
 
-    $host = PhabricatorEnv::getEnvConfig('xmpp.host');
-    $port = PhabricatorEnv::getEnvConfig('xmpp.port');
-    $user = PhabricatorEnv::getEnvConfig('xmpp.user');
-    $pass = PhabricatorEnv::getEnvConfig('xmpp.pass');
+    $host = $this->getOption('host');
+    $port = $this->getOption('port');
+    $user = $this->getOption('user');
+    $pass = $this->getOption('pass');
 
     if (!$host || !$port || !$user || !$pass) {
       throw new Exception(
