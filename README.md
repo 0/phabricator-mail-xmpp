@@ -10,7 +10,7 @@ A [Phabricator](https://phacility.com/phabricator/) mail adapter to send message
 * This is only for outgoing messages.
   It will not receive any replies sent through XMPP.
 * This is a bit of a hack, so use it at your own peril.
-  If something goes wrong, messages could get sliently dropped.
+  If something goes wrong, messages could get silently dropped.
 
 
 ## Requirements
