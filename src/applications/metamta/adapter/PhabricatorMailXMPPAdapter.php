@@ -3,53 +3,15 @@
 /**
  * Mail adapter that uses XMPP to send messages.
  */
-final class PhabricatorMailImplementationXMPPAdapter
-  extends PhabricatorMailImplementationAdapter {
+final class PhabricatorMailXMPPAdapter
+  extends PhabricatorMailAdapter {
 
   const ADAPTERTYPE = 'xmpp';
 
-  private $params = array();
-
-  public function setFrom($email, $name = '') {
-    return $this;
-  }
-
-  public function addReplyTo($email, $name = '') {
-    return $this;
-  }
-
-  public function addTos(array $emails) {
-    foreach ($emails as $email) {
-      $this->params['tos'][] = $email;
-    }
-    return $this;
-  }
-
-  public function addCCs(array $emails) {
-    foreach ($emails as $email) {
-      $this->params['tos'][] = $email;
-    }
-    return $this;
-  }
-
-  public function addAttachment($data, $filename, $mimetype) {}
-
-  public function addHeader($header_name, $header_value) {
-    return $this;
-  }
-
-  public function setBody($body) {
-    $this->params['body'] = $body;
-    return $this;
-  }
-
-  public function setHTMLBody($body) {
-    return $this;
-  }
-
-  public function setSubject($subject) {
-    $this->params['subject'] = $subject;
-    return $this;
+  public function getSupportedMessageTypes() {
+    return array(
+      PhabricatorMailEmailMessage::MESSAGETYPE,
+    );
   }
 
   public function supportsMessageIDHeader() {
@@ -85,7 +47,7 @@ final class PhabricatorMailImplementationXMPPAdapter
    * @phutil-external-symbol class Fabiang\Xmpp\Options
    * @phutil-external-symbol class Fabiang\Xmpp\Protocol\Message
    */
-  public function send() {
+  public function sendMessage(PhabricatorMailExternalMessage $message) {
     $root = dirname(phutil_get_library_root('phabricator-mail-xmpp'));
     require_once $root.'/externals/xmpp/vendor/autoload.php';
 
@@ -104,9 +66,23 @@ final class PhabricatorMailImplementationXMPPAdapter
           'xmpp.password'));
     }
 
-    $subject = idx($this->params, 'subject');
-    $body = idx($this->params, 'body');
+    $subject = $message->getSubject();
+    if ($subject === null) {
+      $subject = "";
+    }
+    $body = $message->getTextBody();
+    if ($body === null) {
+      $body = "";
+    }
     $msg = $subject."\n\n".$body;
+
+    $tos = array();
+    foreach ($message->getToAddresses() as $address) {
+      $tos[] = (string)$address;
+    }
+    foreach ($message->getCCAddresses() as $address) {
+      $tos[] = (string)$address;
+    }
 
     $options = new Fabiang\Xmpp\Options('tcp://'.$host.':'.$port);
     $options->setUsername($user)
@@ -131,7 +107,7 @@ final class PhabricatorMailImplementationXMPPAdapter
     // bubble up, but otherwise always claim success.
 
     try {
-      foreach (idx($this->params, 'tos', array()) as $to) {
+      foreach ($tos as $to) {
         $message = new Fabiang\Xmpp\Protocol\Message();
         $message->setTo($to)
           ->setMessage($msg);
