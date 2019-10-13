@@ -33,8 +33,7 @@ In order for this mail adapter to be useful, you need:
 
 ### Configuration
 
-The `options` for this mailer are: `host`, `port`, `user`, `password`.
-These must be set in `cluster.mailers`; legacy configuration is not supported.
+The `options` for this mailer in `cluster.mailers` are: `host`, `port`, `user`, `password`.
 
 As recommended in [Configuring Outbound Email](https://secure.phabricator.com/book/phabricator/article/configuring_outbound_email/), it's easiest to make a `mailers.json` file and run
 ```
